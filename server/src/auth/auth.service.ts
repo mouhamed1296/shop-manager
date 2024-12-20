@@ -13,9 +13,10 @@ type Payload = {
 export class AuthService {
   logger = new ConsoleLogger();
   Roles = {
-    ROLE_CAISSIER: 1000,
-    ROLE_GERANT: 3000,
+    ROLE_VENDEUR: 1000,
+    ROLE_PROPRIETAIRE: 3000,
     ROLE_ADMIN: 5000,
+    ROLE_SUPER_ADMIN: 7000,
   };
 
   constructor(
