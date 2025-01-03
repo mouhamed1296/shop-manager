@@ -8,6 +8,25 @@ import { Approvisionnement } from "./entities/approvisionnement.entity";
 @Injectable({ scope: Scope.REQUEST })
 export class ApprovisionnementRepository extends BaseRepository
 {
+    remove(id: number) {
+        return this.getRepository(Approvisionnement).softDelete(id);
+    }
+    findOne(id: number) {
+        return this.getRepository(Approvisionnement).findOneBy({id});
+    }
+    findAll() {
+        return this.getRepository(Approvisionnement).find();
+    }
+
+    find(idBoutique: number)
+    {
+        return this.getRepository(Approvisionnement).find({
+            where: {
+                boutique: idBoutique
+            }
+        });
+      
+    }
     constructor(dataSource: DataSource, @Inject(REQUEST) req: Request)
     {
         super(dataSource, req);

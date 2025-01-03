@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Inject, Injectable, Scope } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
@@ -8,6 +9,17 @@ import { UpdateProduitDto } from './dto/update-product.dto';
 
 @Injectable({ scope: Scope.REQUEST })
 export class ProductsRepository extends BaseRepository {
+  findByBoutic(idBoutique: number) {
+    return this.getRepository(Produit).find({
+      where: {
+        boutique: idBoutique,
+      },
+    });
+  }
+
+  find() {
+    return this.getRepository(Produit).find();
+  }
   constructor(dataSource: DataSource, @Inject(REQUEST) req: Request) {
     super(dataSource, req);
   }
@@ -31,11 +43,33 @@ export class ProductsRepository extends BaseRepository {
   // Update a product
 
   async update(id: number, product: UpdateProduitDto) {
-   // implement it
+const existingProduct = await this.getRepository(Produit).findOne({ 
+  where: { id }
+});
+if (!existingProduct) {
+  throw new Error('Produit non existant');
+}
+/* const checkIfProductCodeExists = await this.getRepository(Produit).findOne({
+  where: { code_produit: product.code_produit },
+});
+if (checkIfProductCodeExists) {
+  throw new Error('Produit déjà existant');
+}
+ */
+
+    return this.getRepository(Produit).update(id, product);
+
+
   }
 
   async updateQuantity(products: Partial<Produit>[]) {
-    // implement it
+    const promises = products.map((product) => {
+      return this.getRepository(Produit).update(product.id, {
+        quantite: product.quantite,
+      });
+    }
+    );
+    await Promise.all(promises);
   }
 
   // get low stock products
@@ -148,8 +182,14 @@ export class ProductsRepository extends BaseRepository {
 
   // findAll with user and justificatif
   async findAllWithUserAndJustificatif(page: number, limit: number) {
-    return this.getRepository(Produit)
-      .createQueryBuilder('product')
+    return this.getRepository(Produit).find(
+      {
+        relations: ['user', 'fournisseur', 'boutique'],
+        skip: (page - 1) * limit,
+        take: limit,
+      },
+    );
+      /* .createQueryBuilder('product')
       .leftJoinAndSelect('product.user', 'user')
       .leftJoinAndSelect('product.justificatifs', 'justificatifs')
       .leftJoinAndSelect('product.entrepot', 'entrepot')
@@ -157,7 +197,7 @@ export class ProductsRepository extends BaseRepository {
       .leftJoinAndSelect('product.category', 'category')
       .skip((page - 1) * limit)
       .take(limit)
-      .getMany();
+      .getMany(); */
   }
 
   async findOne(id: number) {

@@ -39,6 +39,6 @@ async function bootstrap() {
   const Adapter = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(Adapter));
 
-  await app.listen(3001);
+  await app.listen(3002);
 }
 bootstrap();

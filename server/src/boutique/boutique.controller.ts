@@ -2,19 +2,25 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { BoutiqueService } from './boutique.service';
 import { CreateBoutiqueDto } from './dto/create-boutique.dto';
 import { UpdateBoutiqueDto } from './dto/update-boutique.dto';
+import { User } from 'src/user/entities/user.entity';
 
 @Controller('boutique')
 export class BoutiqueController {
   constructor(private readonly boutiqueService: BoutiqueService) {}
 
   @Post()
-  create(@Body() createBoutiqueDto: CreateBoutiqueDto) {
-    return this.boutiqueService.create(createBoutiqueDto);
+ async create(@Body() createBoutiqueDto: CreateBoutiqueDto) {
+    return await this.boutiqueService.create(createBoutiqueDto);
   }
 
   @Get()
   findAll() {
     return this.boutiqueService.findAll();
+  }
+
+ @Get('by-proprietaire/:id')
+  async findByProprietaire(@Param('id') id: User) {
+    return this.boutiqueService.findByProprietaire(+id);
   }
 
   @Get(':id')

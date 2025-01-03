@@ -55,7 +55,7 @@ export class ProductController {
     const user = await this.userService.findOne(products[0].connectedUserId);
 
     // Add products to the database with the user who created them
-    const newProducts = await this.productService.addProducts(products, user);
+    const newProducts = await this.productService.addProducts(products, user.id);
 
 
     return newProducts;

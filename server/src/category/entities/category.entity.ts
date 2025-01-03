@@ -1,6 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
-import { User } from '../../user/entities/user.entity';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Produit } from 'src/product/entities/product.entity';
+import { Boutique } from 'src/boutique/entities/boutique.entity';
 
 @Entity('categories')
 export class Category {
@@ -10,8 +10,9 @@ export class Category {
   @Column({ type: 'varchar', length: 255 })
   nom: string;
 
-  @Column({ type: 'integer' })
-  id_proprietaire: number;
+  @ManyToOne(() => Boutique, boutique => boutique.categories) 
+  id_boutique: number;
+
 
   @CreateDateColumn({ type: 'timestamp' })
   date_creation: Date;
@@ -19,9 +20,6 @@ export class Category {
   @UpdateDateColumn({ type: 'timestamp' })
   date_modification: Date;
 
-  @ManyToOne(() => Produit, produit => produit.id_categorie) 
-  produits: Produit[]; 
-
-  @ManyToOne(() => User, user => user.categories)
-  user: User;
+  @OneToMany(() => Produit, produit => produit.categorie) 
+  produits: Produit[];
 }

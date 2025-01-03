@@ -13,7 +13,7 @@ export class CategoryService {
 
   async create(createCategoryDto: CreateCategoryDto) {
     const categoryExists = await this.categoryRepository.findOne({
-      where: { nom: createCategoryDto.nom },
+      where: { nom: createCategoryDto.nom, id_boutique : createCategoryDto.boutique },
     });
 
     if (categoryExists) {
@@ -26,20 +26,23 @@ export class CategoryService {
   }
 
   findAll() {
-    return this.categoryRepository.find();
+    return this.categoryRepository.find(
+    //  {relations: ['produits']}
+
+    );
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} category`;
+    return this.categoryRepository.findOneBy({id});
   }
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    const categoryExists = await this.categoryRepository.findOneBy({id: id});
+    const categoryExists = await this.categoryRepository.findOneBy({id});
     if (!categoryExists) {
       throw new BadRequestException('Categorie non existante');
     }
 
-    const checkIfCategoryNameExists = await this.categoryRepository.findOneBy({nom: updateCategoryDto.nom});
+    const checkIfCategoryNameExists = await this.categoryRepository.findOneBy({nom: updateCategoryDto.nom, id_boutique : updateCategoryDto.boutique});
     if (checkIfCategoryNameExists) {
       throw new ConflictException('Categorie déjà existante');
     }
@@ -47,28 +50,16 @@ export class CategoryService {
     return this.categoryRepository.update(id, updateCategoryDto);
   }
 
+  async findByBoutique(idBoutique: number) {
+    return this.categoryRepository.find({where: {id_boutique: idBoutique}});
+  }
+
   async remove(id: number) {
     //check if category exists
-    const categoryExists = await this.categoryRepository.findOneBy({id: id});
+    const categoryExists = await this.categoryRepository.findOneBy({id});
     if (!categoryExists) {
       throw new BadRequestException('Categorie non existante');
     }
-
-    //get rayons associated with this category
-    //const rayonsOfCategory = await this.rayonRepository.find({where: {idCategory: id}}); 
-
-    //delete rayons associated with this category
-   // for (const rayon of rayonsOfCategory) {
-  //    await this.rayonRepository.delete(rayon.id);
-  //  }
-
-    //check if rayons associated with this category have been deleted
-   // const rayonsOfCategoryAfterDelete = await this.rayonRepository.find({where: {idCategory: id}});
-   // if (rayonsOfCategoryAfterDelete.length > 0) {
-   //   throw new BadRequestException('Rayons associés à cette catégorie non supprimés');
-   // }
-
-    //delete category
-    return this.categoryRepository.delete(id);
+    return this.categoryRepository.softDelete(id);
   }
 }

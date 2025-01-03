@@ -8,10 +8,10 @@ export class LigneVente {
   id: number;
 
   @ManyToOne(() => Vente, (vente) => vente.ligneVentes, { eager: true, onDelete: 'CASCADE' })
-  id_vente: Vente;
+  vente: number;
 
   @ManyToOne(() => Produit, (produit) => produit.ligneVentes, { eager: true, onDelete: 'CASCADE' })
-  id_produit: Produit;
+  produit: number;
 
   @Column({ type: 'int' })
   quantite: number;

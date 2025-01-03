@@ -9,10 +9,10 @@ export class Vente {
   id: number;
 
   @ManyToOne(() => Boutique, (boutique) => boutique.ventes, { eager: true, onDelete: 'CASCADE' })
-  id_boutique: Boutique;
+  boutique: number;
 
   @ManyToOne(() => User, (user) => user.ventes, { eager: true, onDelete: 'CASCADE' })
-  id_user: User;
+  user: number;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   date_vente: Date;
@@ -20,9 +20,9 @@ export class Vente {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   montant_total: number;
 
-  @Column({ type: 'varchar', length: 50 })
-  statut: string;
+ /*  @Column({ type: 'varchar', length: 255 })
+  statut: string; */
 
-  @OneToMany(() => LigneVente, (ligneVente) => ligneVente.id_vente)
+  @OneToMany(() => LigneVente, (ligneVente) => ligneVente.vente)
   ligneVentes: LigneVente[];
 }

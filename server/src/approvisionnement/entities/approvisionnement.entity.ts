@@ -9,10 +9,10 @@ export class Approvisionnement {
   id: number;
 
   @ManyToOne(() => Boutique, (boutique) => boutique.approvisionnements)
-  id_boutique: Boutique;
+  boutique: number;
 
   @ManyToOne(() => Fournisseur, (fournisseur) => fournisseur.approvisionnements)
-  id_fournisseur: Fournisseur;
+  fournisseur: number;
 
   @CreateDateColumn({ type: 'timestamp' })
   date_approvisionnement: Date;
@@ -20,6 +20,6 @@ export class Approvisionnement {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   montant_total: number;
 
-  @OneToMany(() => LigneApprovisionnement, (ligneApprovisionnement) => ligneApprovisionnement.id_approvisionnement)
+  @OneToMany(() => LigneApprovisionnement, (ligneApprovisionnement) => ligneApprovisionnement.approvisionnement)
   ligneApprovisionnements: LigneApprovisionnement[];
 }

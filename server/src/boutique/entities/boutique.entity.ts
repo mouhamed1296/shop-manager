@@ -3,6 +3,8 @@ import { User } from 'src/user/entities/user.entity';
 import { Vente } from 'src/vente/entities/vente.entity';
 import { Produit } from 'src/product/entities/product.entity';
 import { Approvisionnement } from 'src/approvisionnement/entities/approvisionnement.entity';
+import { Category } from 'src/category/entities/category.entity';
+import { Fournisseur } from 'src/fournisseur/entities/fournisseur.entity';
 
 @Entity('boutique')
 export class Boutique {
@@ -24,12 +26,18 @@ export class Boutique {
   @UpdateDateColumn()
   date_modification: Date;
 
-  @OneToMany(() => Produit, (produit) => produit.id_boutique)
+  @OneToMany(() => Produit, (produit) => produit.boutique)
   produits: Produit[];
 
-  @OneToMany(() => Vente, (vente) => vente.id_boutique)
+  @OneToMany(() => Vente, (vente) => vente.boutique)
   ventes: Vente[];
 
-  @OneToMany(() => Approvisionnement, (approvisionnement) => approvisionnement.id_boutique)
+  @OneToMany(() => Approvisionnement, (approvisionnement) => approvisionnement.boutique)
   approvisionnements: Approvisionnement[];
+
+  @OneToMany(() => Category, (categorie) => categorie.id_boutique)
+  categories: Category[];
+  
+  @OneToMany(() => Fournisseur, (fournisseur) => fournisseur.id_boutique)
+  fournisseurs: Fournisseur[];
 }

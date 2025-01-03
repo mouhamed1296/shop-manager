@@ -12,6 +12,11 @@ export class FournisseurController {
     return this.fournisseurService.create(createFournisseurDto);
   }
 
+  @Get('by-boutique/:id')
+  async findByBoutique(@Param('id') id: string) {
+    return this.fournisseurService.findByBoutique(+id);
+  }
+
   @Get()
   findAll() {
     return this.fournisseurService.findAll();
