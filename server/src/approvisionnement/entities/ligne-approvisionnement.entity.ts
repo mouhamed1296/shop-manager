@@ -8,10 +8,10 @@ export class LigneApprovisionnement {
   id: number;
 
   @ManyToOne(() => Approvisionnement, (approvisionnement) => approvisionnement.ligneApprovisionnements, { onDelete: 'CASCADE' })
-  id_approvisionnement: Approvisionnement;
+  approvisionnement: number;
 
   @ManyToOne(() => Produit, (produit) => produit.ligneApprovisionnements, { eager: true })
-  id_produit: Produit;
+  produit: number;
 
   @Column({ type: 'integer' })
   quantite: number;

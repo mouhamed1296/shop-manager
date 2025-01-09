@@ -5,7 +5,9 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Controller('category')
 export class CategoryController {
-  constructor(private readonly categoryService: CategoryService) {}
+  constructor(private readonly categoryService: CategoryService, 
+  // private readonly boutiqueService: BoutiqueService
+  ) {}
 
   @Post()
   create(@Body() createCategoryDto: CreateCategoryDto) {
@@ -17,6 +19,12 @@ export class CategoryController {
     return this.categoryService.findAll();
   }
 
+  @Get('by-boutique/:id')
+ async findByBoutique(@Param('id') id: string) {
+   // const boutique = await this.boutiqueService.findOne(+id);
+    return this.categoryService.findByBoutique(+id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.categoryService.findOne(+id);
@@ -26,6 +34,7 @@ export class CategoryController {
   update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
     return this.categoryService.update(+id, updateCategoryDto);
   }
+
 
   @Delete(':id')
   remove(@Param('id') id: string) {

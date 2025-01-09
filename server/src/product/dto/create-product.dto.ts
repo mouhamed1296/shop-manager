@@ -6,7 +6,7 @@ export class CreateProduitDto {
   libelle: string;
 
   @IsInt()
-  id_categorie: number;
+  categorie: number;
 
   @IsInt()
   quantite: number;
@@ -29,10 +29,13 @@ export class CreateProduitDto {
   code_produit: string;
 
   @IsInt()
-  id_fournisseur: number;
+  fournisseur: number;
 
   @IsInt()
-  id_boutique: number;
+  boutique: number;
+
+  @IsInt()
+  user: number;
 
   @IsInt()
   seuil_alerte: number;

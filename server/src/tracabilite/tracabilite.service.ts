@@ -1,26 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTracabiliteDto } from './dto/create-tracabilite.dto';
-import { UpdateTracabiliteDto } from './dto/update-tracabilite.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm/repository/Repository';
+import { Tracabilite } from './entities/tracabilite.entity';
+import { Between } from 'typeorm';
 
 @Injectable()
 export class TracabiliteService {
+  constructor(
+    @InjectRepository(Tracabilite) private readonly tracabiliteRepository: Repository<Tracabilite>,
+  ) {}
   create(createTracabiliteDto: CreateTracabiliteDto) {
-    return 'This action adds a new tracabilite';
+    const tracabilite = this.tracabiliteRepository.create(createTracabiliteDto);
+    return this.tracabiliteRepository.save(tracabilite);
   }
 
   findAll() {
-    return `This action returns all tracabilite`;
+    return this.tracabiliteRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} tracabilite`;
+  async findByPeriod(dateDebut: Date, dateFin: Date) {
+    return this.tracabiliteRepository.find({where: { date_action: Between(dateDebut, dateFin),}});
   }
 
-  update(id: number, updateTracabiliteDto: UpdateTracabiliteDto) {
-    return `This action updates a #${id} tracabilite`;
+  findOneByUser(id: number) {
+    return this.tracabiliteRepository.find({where: { id_user: id}});
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} tracabilite`;
-  }
 }

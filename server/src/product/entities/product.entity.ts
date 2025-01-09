@@ -4,6 +4,8 @@ import { Boutique } from 'src/boutique/entities/boutique.entity';
 import { LigneApprovisionnement } from '../../approvisionnement/entities/ligne-approvisionnement.entity';
 import { Category } from 'src/category/entities/category.entity';
 import { LigneVente } from 'src/vente/entities/ligne-vente.entity';
+import { User } from 'src/user/entities/user.entity';
+
 
 @Entity('produit')
 export class Produit {
@@ -14,7 +16,7 @@ export class Produit {
   libelle: string;
 
   @ManyToOne(() => Category, (category) => category.produits)
-  id_categorie: number;
+  categorie: number;
 
   @Column({ type: 'int' })
   quantite: number;
@@ -35,19 +37,22 @@ export class Produit {
   code_produit: string;
 
   @ManyToOne(() => Fournisseur, (fournisseur) => fournisseur.produits)
-  id_fournisseur: number;
+  fournisseur: number;
 
   @ManyToOne(() => Boutique, (boutique) => boutique.produits)
-  id_boutique: number;
+  boutique: number;
 
   @Column({ type: 'int' })
   seuil_alerte: number;
 
-  @OneToMany(() => LigneApprovisionnement, (ligneApprovisionnement) => ligneApprovisionnement.id_produit)
+  @OneToMany(() => LigneApprovisionnement, (ligneApprovisionnement) => ligneApprovisionnement.produit)
   ligneApprovisionnements: LigneApprovisionnement[];
 
-  @OneToMany(() => LigneVente, (ligneVente) => ligneVente.id_produit)
+  @OneToMany(() => LigneVente, (ligneVente) => ligneVente.produit)
   ligneVentes: LigneVente[];
+
+  @ManyToOne(() => User, (user) => user.produits)
+  user: number;
 
   @CreateDateColumn()
   date_creation: Date;

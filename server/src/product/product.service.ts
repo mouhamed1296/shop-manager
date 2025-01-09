@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@nestjs/common';
 import { CreateProduitDto } from './dto/create-product.dto';
 import { UpdateProduitDto } from './dto/update-product.dto';
@@ -28,11 +29,26 @@ export class ProductService {
   }
 
   async create(createProductDto: CreateProduitDto, user: User) {
-    // Create a new product
+    // VERIFY EXISTING PRODUCT AND CREATE NEW ONE IF NOT
+    const { product, exist } = await this.verifyProductExistance(createProductDto);
+    if (exist) {
+      const updatedProduct = this.incrementQuantity(product, createProductDto);
+      return this.productRepository.save(updatedProduct);
+    }
+
+    // CREATE NEW PRODUCT
+    const newProduct = await this.productRepository.create({
+      ...createProductDto,
+      user: user.id,
+    });
+
+    return this.productRepository.save(newProduct);
+
+    // return this.productRepository.save(newProduct);
   }
 
   // add products to the database with the user who created them and the justificatif
-  async addProducts(products: CreateProduitDto[], user: User) {
+  async addProducts(products: CreateProduitDto[], user: number) {
     const newProducts = await this.productRepository.createMany(
       products.map((product) => ({
         ...product,
@@ -50,6 +66,7 @@ export class ProductService {
     return await this.productRepository.findAllWithUserAndJustificatif(
       page,
       limit,
+      // relation with user
     );
   }
 
@@ -93,9 +110,12 @@ export class ProductService {
   async filterProductsInEntrepot(filter: any, entrepot: number) {
     return await this.productRepository.filterProducts(filter, entrepot);
   }
+async findByBoutique(idBoutique: number) {
+    return this.productRepository.findByBoutic(idBoutique);
+  }
 
   findAll() {
-    return `This action returns all product`;
+    return this.productRepository.find();
   }
 
   async findOne(id: number) {
@@ -104,6 +124,8 @@ export class ProductService {
 
 
   update(id: number, updateProductDto: UpdateProduitDto) {
+    console.log('id',id, updateProductDto, 'updateProductDto');
+    
     return this.productRepository.update(id, updateProductDto);
   }
 

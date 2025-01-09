@@ -1,9 +1,8 @@
-import { IsString, IsInt } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class CreateCategoryDto {
   @IsString()
   nom: string;
 
-  @IsInt()
-  id_proprietaire: number;
+  boutique: number;
 }

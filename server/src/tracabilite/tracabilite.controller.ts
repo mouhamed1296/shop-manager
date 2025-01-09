@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { TracabiliteService } from './tracabilite.service';
 import { CreateTracabiliteDto } from './dto/create-tracabilite.dto';
-import { UpdateTracabiliteDto } from './dto/update-tracabilite.dto';
+import { User } from 'src/user/entities/user.entity';
 
 @Controller('tracabilite')
 export class TracabiliteController {
@@ -12,23 +12,20 @@ export class TracabiliteController {
     return this.tracabiliteService.create(createTracabiliteDto);
   }
 
+@Get('by-period/:dateDebut/:dateFin')
+  async findByPeriod(@Param('dateDebut') dateDebut: string, @Param('dateFin') dateFin: string) {
+    return this.tracabiliteService.findByPeriod(new Date(dateDebut), new Date(dateFin));
+  }
+
   @Get()
   findAll() {
     return this.tracabiliteService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tracabiliteService.findOne(+id);
+  @Get('by-user/:id')
+  findOneByUser(@Param('id') id: User) {
+    return this.tracabiliteService.findOneByUser(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTracabiliteDto: UpdateTracabiliteDto) {
-    return this.tracabiliteService.update(+id, updateTracabiliteDto);
-  }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tracabiliteService.remove(+id);
-  }
 }

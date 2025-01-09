@@ -11,8 +11,8 @@ import {
 import { Role } from './role.entity';
 import { Boutique } from 'src/boutique/entities/boutique.entity';
 import { Vente } from 'src/vente/entities/vente.entity';
-import { Category } from 'src/category/entities/category.entity';
 import { Tracabilite } from 'src/tracabilite/entities/tracabilite.entity';
+import { Produit } from 'src/product/entities/product.entity';
 
 @Entity()
 export class User {
@@ -41,17 +41,17 @@ export class User {
   @Column({ nullable: true, default: null })
   refreshToken: string;
 
-  @OneToMany(() => Vente, (vente) => vente.id_user )
+  @OneToMany(() => Vente, (vente) => vente.user )
   ventes: Vente[];
 
   @OneToMany(() => Boutique, (boutique) => boutique.id_proprietaire)
   boutiques: Boutique[];
 
-  @OneToMany(() => Category, (category) => category.id_proprietaire)
-  categories: Category[];
-
   @OneToMany(() => Tracabilite, (tracabilite) => tracabilite.id_user)
   tracabilites: Tracabilite[];
+
+  @OneToMany(() => Produit, (produit) => produit.user)
+  produits: Produit[];
 
   @Column()
   password: string;

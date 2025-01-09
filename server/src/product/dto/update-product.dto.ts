@@ -42,6 +42,10 @@ export class UpdateProduitDto {
     @IsOptional()
     @IsInt()
     id_boutique?: number;
+
+    @IsOptional()
+    @IsInt()
+    id_user?: number;
   
     @IsOptional()
     @IsInt()
